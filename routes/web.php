@@ -19,9 +19,13 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::group(['middleware' => 'is_admin'], function() {
+        Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index']);
+    });
+
+    Route::get('profile', [\App\Http\Controllers\User\ProfileController::class, 'show'])->name('profile.show');
+    Route::put('profile', [\App\Http\Controllers\User\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('users', [\App\Http\Controllers\User\UserController::class, 'index'])->name('users.index');
 });
 
 require __DIR__.'/auth.php';
